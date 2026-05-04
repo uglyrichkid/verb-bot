@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Telegraf, Markup } = require('telegraf');
 const verbs = require('./verbs');
 const { getUserStats, recordAnswer, recordRound } = require('./stats');
+const { BTN_QUIZ, init: initQuiz, handleQuizText, isInQuiz, clearQuizSession } = require('./quiz/quizHandler');
 
 if (!process.env.BOT_TOKEN) {
   console.error('Error: BOT_TOKEN is not set. Create a .env file with BOT_TOKEN=your_token');
@@ -45,9 +46,12 @@ function mainMenu() {
   return Markup.keyboard([
     [BTN.SHOW_VERBS, BTN.PRACTICE],
     [BTN.ROUND,      BTN.STATS],
+    [BTN_QUIZ],
     [BTN.STOP],
   ]).resize();
 }
+
+initQuiz(mainMenu);
 
 function typeMenu() {
   return Markup.keyboard([
@@ -234,6 +238,7 @@ function handleStats(ctx) {
 
 function handleStop(ctx) {
   clearSession(ctx.from.id);
+  clearQuizSession(ctx.from.id);
   ctx.reply('🛑 Training stopped. Choose a mode from the menu.', mainMenu());
 }
 
@@ -299,6 +304,11 @@ bot.command('stats', (ctx) => handleStats(ctx));
 
 bot.on('text', (ctx) => {
   const text = ctx.message.text;
+
+  // Quiz: route when entering or mid-session (checked before verb buttons to handle shared labels)
+  if (text === BTN_QUIZ || isInQuiz(ctx.from.id)) {
+    return handleQuizText(ctx);
+  }
 
   // Main menu buttons — always handled, never treated as quiz answers
   if (text === BTN.SHOW_VERBS) return handleShowVerbs(ctx);
