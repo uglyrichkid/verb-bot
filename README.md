@@ -72,3 +72,36 @@ telegram-verb-bot/
 40 irregular verbs: Begin, Break, Bring, Build, Buy, Catch, Come, Do, Drink, Eat, Fall, Find, Fly, Forget, Get, Give, Go, Have, Hear, Know, Leave, Lose, Make, Meet, Pay, Put, Read, Ring, Say, See, Sell, Sit, Sleep, Speak, Stand, Take, Tell, Think, Win, Write.
 
 > **Note on "Read":** the Past Simple spelling is also *read*, but the pronunciation changes from /riːd/ to /rɛd/. The bot will point this out after you answer.
+
+## Deploying to Railway
+
+### 1. Push to GitHub
+
+```bash
+git init
+git add .
+git commit -m "initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main
+```
+
+### 2. Create a Railway project
+
+1. Go to [railway.app](https://railway.app) and log in
+2. Click **New Project → Deploy from GitHub repo**
+3. Select your repository
+
+### 3. Add the bot token
+
+1. In your Railway project, go to the **Variables** tab
+2. Add a new variable:
+   - Name: `BOT_TOKEN`
+   - Value: your real Telegram bot token
+
+### 4. Deploy
+
+Railway will detect Node.js automatically and run `npm start`.  
+No port configuration is needed — the bot uses polling, not a webhook.
+
+> **Note on stats persistence:** `data/stats.json` is stored on Railway's ephemeral filesystem.
+> User stats will reset after each redeploy. This is expected behavior for the free tier.

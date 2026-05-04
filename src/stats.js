@@ -16,16 +16,28 @@ function save(data) {
 
 function getUserStats(userId) {
   const data = load();
-  return data[userId] ?? { total: 0, correct: 0, wrong: 0 };
+  const defaults = { total: 0, correct: 0, wrong: 0, completedRounds: 0, bestRoundMs: null };
+  return { ...defaults, ...(data[userId] ?? {}) };
 }
 
 function recordAnswer(userId, isCorrect) {
   const data = load();
-  if (!data[userId]) data[userId] = { total: 0, correct: 0, wrong: 0 };
+  if (!data[userId]) data[userId] = { total: 0, correct: 0, wrong: 0, completedRounds: 0, bestRoundMs: null };
   data[userId].total += 1;
   if (isCorrect) data[userId].correct += 1;
   else data[userId].wrong += 1;
   save(data);
 }
 
-module.exports = { getUserStats, recordAnswer };
+function recordRound(userId, { durationMs }) {
+  const data = load();
+  if (!data[userId]) data[userId] = { total: 0, correct: 0, wrong: 0, completedRounds: 0, bestRoundMs: null };
+  const u = data[userId];
+  u.completedRounds = (u.completedRounds || 0) + 1;
+  if (!u.bestRoundMs || durationMs < u.bestRoundMs) {
+    u.bestRoundMs = durationMs;
+  }
+  save(data);
+}
+
+module.exports = { getUserStats, recordAnswer, recordRound };
