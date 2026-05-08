@@ -301,7 +301,7 @@ bot.command('stop',  (ctx) => handleStop(ctx));
 bot.command('stats', (ctx) => handleStats(ctx));
 
 // TODO: remove this temporary command
-bot.command('myid', (ctx) => {
+bot.command('myids', (ctx) => {
   ctx.reply(`Your Telegram ID: ${ctx.from.id}`);
 });
 
