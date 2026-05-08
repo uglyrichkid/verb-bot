@@ -300,6 +300,11 @@ bot.command('quiz',  (ctx) => handlePractice(ctx));
 bot.command('stop',  (ctx) => handleStop(ctx));
 bot.command('stats', (ctx) => handleStats(ctx));
 
+// TODO: remove this temporary command
+bot.command('myid', (ctx) => {
+  ctx.reply(`Your Telegram ID: ${ctx.from.id}`);
+});
+
 // ── Text handler ───────────────────────────────────────────────────────────────
 
 bot.on('text', (ctx) => {
