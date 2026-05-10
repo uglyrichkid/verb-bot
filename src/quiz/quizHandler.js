@@ -11,8 +11,6 @@ const {
   vocabulary,
 } = require('./quizLogic');
 
-const ROUND_SIZE = 50;
-
 const BTN = {
   QUIZ:     '🧠 Quiz',
   SHOW:     '📚 Show all words',
@@ -22,6 +20,11 @@ const BTN = {
   EN_HY:    '🇬🇧 English → Armenian',
   HY_EN:    '🇦🇲 Armenian → English',
   STOP:     '❌ Stop round',
+  SIZE_10:  '🔹 10 words',
+  SIZE_25:  '🔹 25 words',
+  SIZE_50:  '🔹 50 words',
+  SIZE_100: '🔹 100 words',
+  SIZE_ALL: '🔹 All words',
 };
 
 const TYPE_LABELS = {
@@ -43,6 +46,15 @@ function directionMenu() {
   return Markup.keyboard([
     [BTN.EN_HY],
     [BTN.HY_EN],
+    [BTN.BACK],
+  ]).resize();
+}
+
+function roundSizeMenu() {
+  return Markup.keyboard([
+    [BTN.SIZE_10, BTN.SIZE_25],
+    [BTN.SIZE_50, BTN.SIZE_100],
+    [BTN.SIZE_ALL],
     [BTN.BACK],
   ]).resize();
 }
@@ -117,9 +129,14 @@ function buildRoundStats(session, stopped) {
     ? ((session.correct / totalAttempts) * 100).toFixed(0)
     : '100';
 
+  const roundSizeLine = session.roundSize != null
+    ? `\n📚 Round size: ${session.roundSize}\n`
+    : '\n';
+
   return (
     (stopped ? '🏁 Round stopped!\n' : '🏁 Round finished!\n') +
-    '\n📊 Result:\n' +
+    roundSizeLine +
+    '📊 Result:\n' +
     `- Words completed: ${session.correct}/${session.totalWords}\n` +
     `- Correct answers: ${session.correct}\n` +
     `- Wrong answers: ${session.wrong}\n` +
@@ -146,6 +163,12 @@ function enterDirection(ctx, pendingMode) {
   return ctx.reply('Choose direction:', directionMenu());
 }
 
+function enterRoundSize(ctx, direction) {
+  const userId = ctx.from.id;
+  setQuizSession(userId, { mode: 'quiz_round_size', direction });
+  return ctx.reply('Choose round size:', roundSizeMenu());
+}
+
 function startPractice(ctx, direction) {
   const userId = ctx.from.id;
   const word = getRandomWord();
@@ -157,15 +180,16 @@ function startPractice(ctx, direction) {
   ).then(() => askWord(ctx, word, direction, practiceMenu()));
 }
 
-function startRound(ctx, direction) {
+function startRound(ctx, direction, roundSize) {
   const userId = ctx.from.id;
-  const queue = getRoundPool(ROUND_SIZE);
+  const queue = getRoundPool(roundSize);
   setQuizSession(userId, {
     mode: 'quiz_round',
     direction,
     queue,
     currentWord: queue[0],
     totalWords: queue.length,
+    roundSize: queue.length,
     correct: 0,
     wrong: 0,
     startTime: Date.now(),
@@ -254,11 +278,24 @@ function handleQuizText(ctx) {
 
     case 'quiz_direction':
       if (text === BTN.EN_HY)
-        return session.pendingMode === 'practice' ? startPractice(ctx, 'en-hy') : startRound(ctx, 'en-hy');
+        return session.pendingMode === 'practice' ? startPractice(ctx, 'en-hy') : enterRoundSize(ctx, 'en-hy');
       if (text === BTN.HY_EN)
-        return session.pendingMode === 'practice' ? startPractice(ctx, 'hy-en') : startRound(ctx, 'hy-en');
+        return session.pendingMode === 'practice' ? startPractice(ctx, 'hy-en') : enterRoundSize(ctx, 'hy-en');
       if (text === BTN.BACK) return enterQuizMain(ctx);
       return ctx.reply('Choose a direction:', directionMenu());
+
+    case 'quiz_round_size': {
+      const SIZE_MAP = {
+        [BTN.SIZE_10]:  10,
+        [BTN.SIZE_25]:  25,
+        [BTN.SIZE_50]:  50,
+        [BTN.SIZE_100]: 100,
+        [BTN.SIZE_ALL]: vocabulary.length,
+      };
+      if (SIZE_MAP[text] !== undefined) return startRound(ctx, session.direction, SIZE_MAP[text]);
+      if (text === BTN.BACK) return enterDirection(ctx, 'round');
+      return ctx.reply('Choose round size:', roundSizeMenu());
+    }
 
     case 'quiz_practice':
       if (text === BTN.BACK) {
