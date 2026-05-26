@@ -20,11 +20,11 @@ for (const line of raw.split('\n')) {
   if (parts.length < 3) continue;
 
   const en = parts[0].trim();
-  // parts[1] is the IPA pronunciation — skip it
+  const ipa = parts[1] ? parts[1].trim() : null;
   const hy = parts[2].split(',').map(s => s.trim()).filter(Boolean);
 
   if (en && hy.length > 0) {
-    words.push({ id, type: 'word', en, hy });
+    words.push({ id, type: 'word', en, ipa, hy });
   }
 }
 

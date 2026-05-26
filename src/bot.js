@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Telegraf, Markup } = require('telegraf');
 const verbs = require('./verbs');
 const { getUserStats, recordAnswer, recordRound } = require('./stats');
+const { getDailyProgress } = require('./wordStats');
 const { BTN_QUIZ, init: initQuiz, handleQuizText, isInQuiz, clearQuizSession } = require('./quiz/quizHandler');
 const { BTN_QUIZ_504, init504, handle504QuizText, isIn504Quiz, clearQuiz504Session } = require('./quiz/quiz504Handler');
 
@@ -302,6 +303,17 @@ bot.start((ctx) => {
 bot.command('quiz',  (ctx) => handlePractice(ctx));
 bot.command('stop',  (ctx) => handleStop(ctx));
 bot.command('stats', (ctx) => handleStats(ctx));
+bot.command('daily', (ctx) => {
+  const { answered, correct, goal } = getDailyProgress(ctx.from.id);
+  const wrong = answered - correct;
+  const pct = goal > 0 ? Math.min(Math.round(answered / goal * 100), 100) : 0;
+  const filled = Math.round(pct / 10);
+  const bar = '▓'.repeat(filled) + '░'.repeat(10 - filled);
+  ctx.reply(
+    `📅 *Today's Progress*\n\n${bar} ${pct}%\n📖 ${answered}/${goal} words\n✅ ${correct} correct  ❌ ${wrong} wrong`,
+    { parse_mode: 'Markdown', ...mainMenu() }
+  );
+});
 
 // TODO: remove this temporary command
 bot.command('myids', (ctx) => {

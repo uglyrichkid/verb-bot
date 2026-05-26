@@ -45,6 +45,60 @@ function groupByType(words) {
   return groups;
 }
 
+// ── Spaced-repetition helpers (word-list-agnostic) ────────────────────────────
+
+function _wordWeight(w, rawStats) {
+  const ws = rawStats[w.id];
+  if (!ws || ws.shown === 0) return 1.0; // unseen: medium weight
+  const difficulty = Math.min(ws.wrong / (ws.shown + 1), 1.0);
+  const daysSince = (Date.now() - ws.lastPracticed) / 86400000;
+  const recency = Math.min(daysSince / 3, 1.0); // ramps up over 3 days
+  return 0.3 + difficulty * 0.5 + recency * 0.2;
+}
+
+function getWeightedRandomWordFrom(wordList, rawStats) {
+  if (!wordList || wordList.length === 0) return null;
+  const weights = wordList.map(w => _wordWeight(w, rawStats));
+  const total = weights.reduce((s, w) => s + w, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < wordList.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return wordList[i];
+  }
+  return wordList[wordList.length - 1];
+}
+
+function getWeightedRoundPool(size, wordList, rawStats) {
+  const available = [...wordList];
+  const picked = [];
+  const limit = Math.min(size, available.length);
+  while (picked.length < limit && available.length > 0) {
+    const weights = available.map(w => _wordWeight(w, rawStats));
+    const total = weights.reduce((s, w) => s + w, 0);
+    let r = Math.random() * total;
+    let idx = available.length - 1;
+    for (let i = 0; i < available.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { idx = i; break; }
+    }
+    picked.push(available.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
+// Generate 4 options (1 correct + 3 random wrong) for multiple-choice questions.
+function generateMCOptions(correctWord, direction, wordList) {
+  const correct = direction === 'en-hy' ? correctWord.hy[0] : correctWord.en;
+  const candidates = shuffle(wordList.filter(w => w.id !== correctWord.id));
+  const wrongOptions = [];
+  for (const w of candidates) {
+    const opt = direction === 'en-hy' ? w.hy[0] : w.en;
+    if (opt !== correct && !wrongOptions.includes(opt)) wrongOptions.push(opt);
+    if (wrongOptions.length === 3) break;
+  }
+  return { options: shuffle([correct, ...wrongOptions]), correct };
+}
+
 module.exports = {
   shuffle,
   getRoundPool,
@@ -54,4 +108,7 @@ module.exports = {
   formatDuration,
   groupByType,
   vocabulary,
+  getWeightedRandomWordFrom,
+  getWeightedRoundPool,
+  generateMCOptions,
 };
