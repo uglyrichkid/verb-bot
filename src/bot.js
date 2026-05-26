@@ -3,6 +3,7 @@ const { Telegraf, Markup } = require('telegraf');
 const verbs = require('./verbs');
 const { getUserStats, recordAnswer, recordRound } = require('./stats');
 const { BTN_QUIZ, init: initQuiz, handleQuizText, isInQuiz, clearQuizSession } = require('./quiz/quizHandler');
+const { BTN_QUIZ_504, init504, handle504QuizText, isIn504Quiz, clearQuiz504Session } = require('./quiz/quiz504Handler');
 
 if (!process.env.BOT_TOKEN) {
   console.error('Error: BOT_TOKEN is not set. Create a .env file with BOT_TOKEN=your_token');
@@ -46,12 +47,13 @@ function mainMenu() {
   return Markup.keyboard([
     [BTN.SHOW_VERBS, BTN.PRACTICE],
     [BTN.ROUND,      BTN.STATS],
-    [BTN_QUIZ],
+    [BTN_QUIZ, BTN_QUIZ_504],
     [BTN.STOP],
   ]).resize();
 }
 
 initQuiz(mainMenu);
+init504(mainMenu);
 
 function typeMenu() {
   return Markup.keyboard([
@@ -239,6 +241,7 @@ function handleStats(ctx) {
 function handleStop(ctx) {
   clearSession(ctx.from.id);
   clearQuizSession(ctx.from.id);
+  clearQuiz504Session(ctx.from.id);
   ctx.reply('🛑 Training stopped. Choose a mode from the menu.', mainMenu());
 }
 
@@ -313,6 +316,9 @@ bot.on('text', (ctx) => {
   // Quiz: route when entering or mid-session (checked before verb buttons to handle shared labels)
   if (text === BTN_QUIZ || isInQuiz(ctx.from.id)) {
     return handleQuizText(ctx);
+  }
+  if (text === BTN_QUIZ_504 || isIn504Quiz(ctx.from.id)) {
+    return handle504QuizText(ctx);
   }
 
   // Main menu buttons — always handled, never treated as quiz answers
