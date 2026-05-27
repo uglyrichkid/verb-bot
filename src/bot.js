@@ -5,6 +5,7 @@ const { getUserStats, recordAnswer, recordRound } = require('./stats');
 const { getDailyProgress } = require('./wordStats');
 const { BTN_QUIZ, init: initQuiz, handleQuizText, isInQuiz, clearQuizSession } = require('./quiz/quizHandler');
 const { BTN_QUIZ_504, init504, handle504QuizText, isIn504Quiz, clearQuiz504Session } = require('./quiz/quiz504Handler');
+const topicsHandler = require('./topics/topicsHandler');
 
 if (!process.env.BOT_TOKEN) {
   console.error('Error: BOT_TOKEN is not set. Create a .env file with BOT_TOKEN=your_token');
@@ -55,6 +56,7 @@ function mainMenu() {
 
 initQuiz(mainMenu);
 init504(mainMenu);
+topicsHandler.init(bot);
 
 function typeMenu() {
   return Markup.keyboard([
@@ -324,6 +326,11 @@ bot.command('myids', (ctx) => {
 
 bot.on('text', (ctx) => {
   const text = ctx.message.text;
+
+  // Grammar topics answer check takes priority over all other routing
+  if (topicsHandler.isWaitingForGrammarAnswer(ctx.from.id)) {
+    return topicsHandler.handleGrammarAnswer(ctx);
+  }
 
   // Quiz: route when entering or mid-session (checked before verb buttons to handle shared labels)
   if (text === BTN_QUIZ || isInQuiz(ctx.from.id)) {
