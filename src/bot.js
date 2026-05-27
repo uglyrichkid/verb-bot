@@ -22,6 +22,7 @@ const BTN = {
   PRACTICE:     '🎯 Practice mode',
   ROUND:        '🏁 Round mode',
   STATS:        '📊 Stats',
+  TOPICS:       '📚 Grammar Topics',
   STOP:         '🛑 Stop',
   TYPE_MIXED:   '🔀 Mixed',
   TYPE_IRR:     '🔴 Irregular only',
@@ -50,6 +51,7 @@ function mainMenu() {
     [BTN.SHOW_VERBS, BTN.PRACTICE],
     [BTN.ROUND,      BTN.STATS],
     [BTN_QUIZ, BTN_QUIZ_504],
+    [BTN.TOPICS],
     [BTN.STOP],
   ]).resize();
 }
@@ -327,9 +329,12 @@ bot.command('myids', (ctx) => {
 bot.on('text', (ctx) => {
   const text = ctx.message.text;
 
-  // Grammar topics answer check takes priority over all other routing
+  // Grammar topics intercepts take priority over all other routing
   if (topicsHandler.isWaitingForGrammarAnswer(ctx.from.id)) {
     return topicsHandler.handleGrammarAnswer(ctx);
+  }
+  if (topicsHandler.isWaitingForExerciseAnswer(ctx.from.id)) {
+    return topicsHandler.handleExerciseAnswer(ctx);
   }
 
   // Quiz: route when entering or mid-session (checked before verb buttons to handle shared labels)
@@ -345,6 +350,7 @@ bot.on('text', (ctx) => {
   if (text === BTN.PRACTICE)   return handlePractice(ctx);
   if (text === BTN.ROUND)      return handleRound(ctx);
   if (text === BTN.STATS)      return handleStats(ctx);
+  if (text === BTN.TOPICS)     return topicsHandler.handleTopicsCommand(ctx);
   if (text === BTN.STOP)       return handleStop(ctx);
 
   // Selection-step buttons

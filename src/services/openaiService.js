@@ -59,15 +59,56 @@ Write 10 simple example sentences for Unit ${unit.id} — "${unit.title}".
   );
 }
 
-async function generateUnitExercises(unit) {
+// Returns a JSON string for one exercise. Caller must parse and handle failures.
+async function generateSingleExercise(unit, exerciseNumber) {
+  const exerciseTypes = 'make positive / make negative / make question / fill in the blank / correct the mistake';
+  const raw = await ask(
+    `You are an English grammar teacher for Armenian learners (A1-A2 level).
+Generate exercise number ${exerciseNumber} for Unit ${unit.id} — "${unit.title}".
+
+Choose one exercise type: ${exerciseTypes}.
+Vary the type from previous exercises based on the exercise number.
+If this unit covers positive/negative/question forms, include those types.
+
+Return ONLY valid JSON — no extra text, no markdown fences:
+{
+  "type": "negative",
+  "instruction": "Make this sentence negative.",
+  "question": "I work every day.",
+  "expectedAnswer": "I don't work every day.",
+  "hint": "Use don't with I/you/we/they."
+}
+
+Rules:
+- Keep sentences simple (A1-A2 level).
+- The hint field is optional but helpful for harder exercises.
+- Do NOT reveal the answer in instruction or question.`,
+    350,
+  );
+  return raw;
+}
+
+async function checkExerciseAnswer(unit, exercise, userAnswer) {
+  const exerciseContext = exercise.raw
+    ? exercise.raw
+    : `Type: ${exercise.type}\nInstruction: ${exercise.instruction}\nQuestion: ${exercise.question}`;
+
   return ask(
     `You are an English grammar teacher for Armenian learners (A1-A2 level).
-Create 6 practice exercises for Unit ${unit.id} — "${unit.title}".
-- Mix types: fill in the blank, correct the mistake, make a question, transform positive to negative.
-- Number each exercise.
-- Do NOT include answers.
-- Keep all sentences simple (A1-A2 level).`,
-    900,
+Unit: ${unit.id} — "${unit.title}"
+
+Exercise:
+${exerciseContext}
+
+Student's answer: "${userAnswer}"
+
+Respond with:
+1. ✅ Correct! or ❌ Incorrect — [corrected version]
+2. 💡 Short explanation in simple English (add Armenian if helpful, 1-2 sentences)
+3. 📝 One similar correct example
+
+Be encouraging and brief.`,
+    400,
   );
 }
 
@@ -91,6 +132,7 @@ module.exports = {
   generateUnitExplanation,
   generateUnitRules,
   generateUnitExamples,
-  generateUnitExercises,
+  generateSingleExercise,
+  checkExerciseAnswer,
   checkUserAnswer,
 };
