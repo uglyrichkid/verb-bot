@@ -2,7 +2,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const JSON_PATH = path.join(__dirname, '..', 'data', 'words504.json');
+const DATA_DIR  = path.join(__dirname, '..', 'data');
+const JSON_PATH = path.join(DATA_DIR, 'words504.json');
 const TXT_PATH  = path.join(__dirname, '..', '504.txt');
 
 let _words = null;
@@ -39,6 +40,7 @@ function loadWords() {
 }
 
 function saveWords(list) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(JSON_PATH, JSON.stringify(list, null, 2), 'utf8');
 }
 
