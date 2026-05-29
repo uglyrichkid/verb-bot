@@ -1,0 +1,925 @@
+[
+  {
+    "id": 1,
+    "type": "word",
+    "en": "abandon",
+    "ipa": "/əˈbæn.dən/",
+    "hy": [
+      "լքել"
+    ]
+  },
+  {
+    "id": 2,
+    "type": "word",
+    "en": "keen",
+    "ipa": "/kiːn/",
+    "hy": [
+      "սուր",
+      "հետաքրքրված"
+    ]
+  },
+  {
+    "id": 3,
+    "type": "word",
+    "en": "jealous",
+    "ipa": "/ˈdʒel.əs/",
+    "hy": [
+      "խանդոտ"
+    ]
+  },
+  {
+    "id": 4,
+    "type": "word",
+    "en": "tact",
+    "ipa": "/tækt/",
+    "hy": [
+      "տակտ"
+    ]
+  },
+  {
+    "id": 5,
+    "type": "word",
+    "en": "oath",
+    "ipa": "/oʊθ/",
+    "hy": [
+      "երդում"
+    ]
+  },
+  {
+    "id": 6,
+    "type": "word",
+    "en": "vacant",
+    "ipa": "/ˈveɪ.kənt/",
+    "hy": [
+      "դատարկ"
+    ]
+  },
+  {
+    "id": 7,
+    "type": "word",
+    "en": "hardship",
+    "ipa": "/ˈhɑːrd.ʃɪp/",
+    "hy": [
+      "դժվարություն"
+    ]
+  },
+  {
+    "id": 8,
+    "type": "word",
+    "en": "gallant",
+    "ipa": "/ˈɡæl.ənt/",
+    "hy": [
+      "քաջ",
+      "քաղաքավարի"
+    ]
+  },
+  {
+    "id": 9,
+    "type": "word",
+    "en": "data",
+    "ipa": "/ˈdeɪ.tə/",
+    "hy": [
+      "տվյալներ"
+    ]
+  },
+  {
+    "id": 10,
+    "type": "word",
+    "en": "unaccustomed",
+    "ipa": "/ˌʌn.əˈkʌs.təmd/",
+    "hy": [
+      "չսովորած"
+    ]
+  },
+  {
+    "id": 11,
+    "type": "word",
+    "en": "bachelor",
+    "ipa": "/ˈbætʃ.ə.lər/",
+    "hy": [
+      "ամուրի"
+    ]
+  },
+  {
+    "id": 12,
+    "type": "word",
+    "en": "qualify",
+    "ipa": "/ˈkwɑː.lə.faɪ/",
+    "hy": [
+      "համապատասխանել"
+    ]
+  },
+  {
+    "id": 13,
+    "type": "word",
+    "en": "widow",
+    "ipa": "/ˈwɪd.oʊ/",
+    "hy": [
+      "այրի կին"
+    ]
+  },
+  {
+    "id": 14,
+    "type": "word",
+    "en": "witness",
+    "ipa": "/ˈwɪt.nəs/",
+    "hy": [
+      "վկա"
+    ]
+  },
+  {
+    "id": 15,
+    "type": "word",
+    "en": "landlord",
+    "ipa": "/ˈlænd.lɔːrd/",
+    "hy": [
+      "տանտեր"
+    ]
+  },
+  {
+    "id": 16,
+    "type": "word",
+    "en": "overcome",
+    "ipa": "/ˌoʊ.vərˈkʌm/",
+    "hy": [
+      "հաղթահարել"
+    ]
+  },
+  {
+    "id": 17,
+    "type": "word",
+    "en": "knight",
+    "ipa": "/naɪt/",
+    "hy": [
+      "ասպետ"
+    ]
+  },
+  {
+    "id": 18,
+    "type": "word",
+    "en": "contest",
+    "ipa": "/ˈkɑːn.test/",
+    "hy": [
+      "մրցույթ"
+    ]
+  },
+  {
+    "id": 19,
+    "type": "word",
+    "en": "gesture",
+    "ipa": "/ˈdʒes.tʃər/",
+    "hy": [
+      "ժեստ"
+    ]
+  },
+  {
+    "id": 20,
+    "type": "word",
+    "en": "puddle",
+    "ipa": "/ˈpʌd.əl/",
+    "hy": [
+      "ջրափոս"
+    ]
+  },
+  {
+    "id": 21,
+    "type": "word",
+    "en": "muddy",
+    "ipa": "/ˈmʌd.i/",
+    "hy": [
+      "ցեխոտ"
+    ]
+  },
+  {
+    "id": 22,
+    "type": "word",
+    "en": "cloak",
+    "ipa": "/kloʊk/",
+    "hy": [
+      "թիկնոց"
+    ]
+  },
+  {
+    "id": 23,
+    "type": "word",
+    "en": "queen",
+    "ipa": "/kwiːn/",
+    "hy": [
+      "թագուհի"
+    ]
+  },
+  {
+    "id": 24,
+    "type": "word",
+    "en": "nobleman",
+    "ipa": "/ˈnoʊ.bəl.mən/",
+    "hy": [
+      "ազնվական"
+    ]
+  },
+  {
+    "id": 25,
+    "type": "word",
+    "en": "upbringing",
+    "ipa": "/ˈʌpˌbrɪŋ.ɪŋ/",
+    "hy": [
+      "դաստիարակություն"
+    ]
+  },
+  {
+    "id": 26,
+    "type": "word",
+    "en": "subway",
+    "ipa": "/ˈsʌb.weɪ/",
+    "hy": [
+      "մետրո"
+    ]
+  },
+  {
+    "id": 27,
+    "type": "word",
+    "en": "generous",
+    "ipa": "/ˈdʒen.ər.əs/",
+    "hy": [
+      "առատաձեռն"
+    ]
+  },
+  {
+    "id": 28,
+    "type": "word",
+    "en": "flirting",
+    "ipa": "/ˈflɝː.tɪŋ/",
+    "hy": [
+      "ֆլիրտ անել"
+    ]
+  },
+  {
+    "id": 29,
+    "type": "word",
+    "en": "probably",
+    "ipa": "/ˈprɑː.bə.bli/",
+    "hy": [
+      "հավանաբար"
+    ]
+  },
+  {
+    "id": 30,
+    "type": "word",
+    "en": "blade",
+    "ipa": "/bleɪd/",
+    "hy": [
+      "սայր"
+    ]
+  },
+  {
+    "id": 31,
+    "type": "word",
+    "en": "shave",
+    "ipa": "/ʃeɪv/",
+    "hy": [
+      "սափրվել"
+    ]
+  },
+  {
+    "id": 32,
+    "type": "word",
+    "en": "jury",
+    "ipa": "/ˈdʒʊr.i/",
+    "hy": [
+      "երդվյալներ"
+    ]
+  },
+  {
+    "id": 33,
+    "type": "word",
+    "en": "prisoner",
+    "ipa": "/ˈprɪz.ən.ər/",
+    "hy": [
+      "բանտարկյալ"
+    ]
+  },
+  {
+    "id": 34,
+    "type": "word",
+    "en": "tune",
+    "ipa": "/tuːn/",
+    "hy": [
+      "մեղեդի"
+    ]
+  },
+  {
+    "id": 35,
+    "type": "word",
+    "en": "chorus",
+    "ipa": "/ˈkɔːr.əs/",
+    "hy": [
+      "երգչախումբ"
+    ]
+  },
+  {
+    "id": 36,
+    "type": "word",
+    "en": "policeman",
+    "ipa": "/pəˈliːs.mən/",
+    "hy": [
+      "ոստիկան"
+    ]
+  },
+  {
+    "id": 37,
+    "type": "word",
+    "en": "detective",
+    "ipa": "/dɪˈtek.tɪv/",
+    "hy": [
+      "դետեկտիվ"
+    ]
+  },
+  {
+    "id": 38,
+    "type": "word",
+    "en": "butcher",
+    "ipa": "/ˈbʊtʃ.ər/",
+    "hy": [
+      "մսագործ"
+    ]
+  },
+  {
+    "id": 39,
+    "type": "word",
+    "en": "sensitive",
+    "ipa": "/ˈsen.sə.tɪv/",
+    "hy": [
+      "զգայուն"
+    ]
+  },
+  {
+    "id": 40,
+    "type": "word",
+    "en": "apartment",
+    "ipa": "/əˈpɑːrt.mənt/",
+    "hy": [
+      "բնակարան"
+    ]
+  },
+  {
+    "id": 41,
+    "type": "word",
+    "en": "fighter",
+    "ipa": "/ˈfaɪ.t̬ɚ/",
+    "hy": [
+      "մարտիկ"
+    ]
+  },
+  {
+    "id": 42,
+    "type": "word",
+    "en": "champion",
+    "ipa": "/ˈtʃæm.pi.ən/",
+    "hy": [
+      "չեմպիոն"
+    ]
+  },
+  {
+    "id": 43,
+    "type": "word",
+    "en": "army",
+    "ipa": "/ˈɑːr.mi/",
+    "hy": [
+      "բանակ"
+    ]
+  },
+  {
+    "id": 44,
+    "type": "word",
+    "en": "pilot",
+    "ipa": "/ˈpaɪ.lət/",
+    "hy": [
+      "օդաչու"
+    ]
+  },
+  {
+    "id": 45,
+    "type": "word",
+    "en": "buddy",
+    "ipa": "/ˈbʌd.i/",
+    "hy": [
+      "ընկեր"
+    ]
+  },
+  {
+    "id": 46,
+    "type": "word",
+    "en": "princess",
+    "ipa": "/ˌprɪnˈses/",
+    "hy": [
+      "արքայադուստր"
+    ]
+  },
+  {
+    "id": 47,
+    "type": "word",
+    "en": "seat",
+    "ipa": "/siːt/",
+    "hy": [
+      "նստատեղ"
+    ]
+  },
+  {
+    "id": 48,
+    "type": "word",
+    "en": "robbery",
+    "ipa": "/ˈrɑː.bɚ.i/",
+    "hy": [
+      "կողոպուտ"
+    ]
+  },
+  {
+    "id": 49,
+    "type": "word",
+    "en": "report",
+    "ipa": "/rɪˈpɔːrt/",
+    "hy": [
+      "զեկույց"
+    ]
+  },
+  {
+    "id": 50,
+    "type": "word",
+    "en": "math",
+    "ipa": "/mæθ/",
+    "hy": [
+      "մաթեմատիկա"
+    ]
+  },
+  {
+    "id": 51,
+    "type": "word",
+    "en": "office",
+    "ipa": "/ˈɑː.fɪs/",
+    "hy": [
+      "գրասենյակ"
+    ]
+  },
+  {
+    "id": 52,
+    "type": "word",
+    "en": "truth",
+    "ipa": "/truːθ/",
+    "hy": [
+      "ճշմարտություն"
+    ]
+  },
+  {
+    "id": 53,
+    "type": "word",
+    "en": "curse",
+    "ipa": "/kɝːs/",
+    "hy": [
+      "անեծք"
+    ]
+  },
+  {
+    "id": 54,
+    "type": "word",
+    "en": "disobey",
+    "ipa": "/ˌdɪs.əˈbeɪ/",
+    "hy": [
+      "չենթարկվել"
+    ]
+  },
+  {
+    "id": 55,
+    "type": "word",
+    "en": "exercise",
+    "ipa": "/ˈek.sɚ.saɪz/",
+    "hy": [
+      "վարժություն"
+    ]
+  },
+  {
+    "id": 56,
+    "type": "word",
+    "en": "wedding",
+    "ipa": "/ˈwed.ɪŋ/",
+    "hy": [
+      "հարսանիք"
+    ]
+  },
+  {
+    "id": 57,
+    "type": "word",
+    "en": "actor",
+    "ipa": "/ˈæk.tɚ/",
+    "hy": [
+      "դերասան"
+    ]
+  },
+  {
+    "id": 58,
+    "type": "word",
+    "en": "college",
+    "ipa": "/ˈkɑː.lɪdʒ/",
+    "hy": [
+      "քոլեջ"
+    ]
+  },
+  {
+    "id": 59,
+    "type": "word",
+    "en": "history",
+    "ipa": "/ˈhɪs.tɚ.i/",
+    "hy": [
+      "պատմություն"
+    ]
+  },
+  {
+    "id": 60,
+    "type": "word",
+    "en": "situation",
+    "ipa": "/ˌsɪtʃ.uˈeɪ.ʃən/",
+    "hy": [
+      "իրավիճակ"
+    ]
+  },
+  {
+    "id": 61,
+    "type": "word",
+    "en": "accept",
+    "ipa": "/əkˈsept/",
+    "hy": [
+      "ընդունել"
+    ]
+  },
+  {
+    "id": 62,
+    "type": "word",
+    "en": "nearby",
+    "ipa": "/ˌnɪrˈbaɪ/",
+    "hy": [
+      "մոտակայքում"
+    ]
+  },
+  {
+    "id": 63,
+    "type": "word",
+    "en": "breath",
+    "ipa": "/breθ/",
+    "hy": [
+      "շունչ"
+    ]
+  },
+  {
+    "id": 64,
+    "type": "word",
+    "en": "trouble",
+    "ipa": "/ˈtrʌb.əl/",
+    "hy": [
+      "խնդիր"
+    ]
+  },
+  {
+    "id": 65,
+    "type": "word",
+    "en": "result",
+    "ipa": "/rɪˈzʌlt/",
+    "hy": [
+      "արդյունք"
+    ]
+  },
+  {
+    "id": 66,
+    "type": "word",
+    "en": "thousand",
+    "ipa": "/ˈθaʊ.zənd/",
+    "hy": [
+      "հազար"
+    ]
+  },
+  {
+    "id": 67,
+    "type": "word",
+    "en": "mixed up",
+    "ipa": "/mɪkst ʌp/",
+    "hy": [
+      "շփոթված"
+    ]
+  },
+  {
+    "id": 68,
+    "type": "word",
+    "en": "extra weight",
+    "ipa": "/ˈek.strə weɪt/",
+    "hy": [
+      "ավելորդ քաշ"
+    ]
+  },
+  {
+    "id": 69,
+    "type": "word",
+    "en": "flat tire",
+    "ipa": "/flæt ˈtaɪər/",
+    "hy": [
+      "ծակված անվադող"
+    ]
+  },
+  {
+    "id": 70,
+    "type": "word",
+    "en": "carry a tune",
+    "ipa": "/ˈkær.i ə tuːn/",
+    "hy": [
+      "ճիշտ երգել"
+    ]
+  },
+  {
+    "id": 71,
+    "type": "word",
+    "en": "corpse",
+    "ipa": null,
+    "hy": [
+      "դիակ"
+    ]
+  },
+  {
+    "id": 72,
+    "type": "word",
+    "en": "conceal",
+    "ipa": null,
+    "hy": [
+      "թաքցնել"
+    ]
+  },
+  {
+    "id": 73,
+    "type": "word",
+    "en": "dismal",
+    "ipa": null,
+    "hy": [
+      "մռայլ"
+    ]
+  },
+  {
+    "id": 74,
+    "type": "word",
+    "en": "frigid",
+    "ipa": null,
+    "hy": [
+      "սառցե",
+      "շատ սառը"
+    ]
+  },
+  {
+    "id": 75,
+    "type": "word",
+    "en": "inhabit",
+    "ipa": null,
+    "hy": [
+      "բնակվել"
+    ]
+  },
+  {
+    "id": 76,
+    "type": "word",
+    "en": "numb",
+    "ipa": null,
+    "hy": [
+      "թմրած"
+    ]
+  },
+  {
+    "id": 77,
+    "type": "word",
+    "en": "peril",
+    "ipa": null,
+    "hy": [
+      "վտանգ"
+    ]
+  },
+  {
+    "id": 78,
+    "type": "word",
+    "en": "recline",
+    "ipa": null,
+    "hy": [
+      "պառկել",
+      "հենվել հետ"
+    ]
+  },
+  {
+    "id": 79,
+    "type": "word",
+    "en": "shriek",
+    "ipa": null,
+    "hy": [
+      "ճչալ"
+    ]
+  },
+  {
+    "id": 80,
+    "type": "word",
+    "en": "sinister",
+    "ipa": null,
+    "hy": [
+      "չարագուշակ",
+      "վախեցնող"
+    ]
+  },
+  {
+    "id": 81,
+    "type": "word",
+    "en": "tempt",
+    "ipa": null,
+    "hy": [
+      "գայթակղել"
+    ]
+  },
+  {
+    "id": 82,
+    "type": "word",
+    "en": "wager",
+    "ipa": null,
+    "hy": [
+      "գրազ"
+    ]
+  },
+  {
+    "id": 83,
+    "type": "word",
+    "en": "latitude",
+    "ipa": null,
+    "hy": [
+      "լայնություն"
+    ]
+  },
+  {
+    "id": 84,
+    "type": "word",
+    "en": "longitude",
+    "ipa": null,
+    "hy": [
+      "երկայնություն"
+    ]
+  },
+  {
+    "id": 85,
+    "type": "word",
+    "en": "slightest",
+    "ipa": null,
+    "hy": [
+      "ամենաչնչին"
+    ]
+  },
+  {
+    "id": 86,
+    "type": "word",
+    "en": "cemetery",
+    "ipa": null,
+    "hy": [
+      "գերեզմանոց"
+    ]
+  },
+  {
+    "id": 87,
+    "type": "word",
+    "en": "grave",
+    "ipa": null,
+    "hy": [
+      "գերեզման"
+    ]
+  },
+  {
+    "id": 88,
+    "type": "word",
+    "en": "blanket",
+    "ipa": null,
+    "hy": [
+      "ծածկոց"
+    ]
+  },
+  {
+    "id": 89,
+    "type": "word",
+    "en": "flashlight",
+    "ipa": null,
+    "hy": [
+      "լապտեր"
+    ]
+  },
+  {
+    "id": 90,
+    "type": "word",
+    "en": "darkness",
+    "ipa": null,
+    "hy": [
+      "մթություն"
+    ]
+  },
+  {
+    "id": 91,
+    "type": "word",
+    "en": "midnight",
+    "ipa": null,
+    "hy": [
+      "կեսգիշեր"
+    ]
+  },
+  {
+    "id": 92,
+    "type": "word",
+    "en": "fear",
+    "ipa": null,
+    "hy": [
+      "վախ"
+    ]
+  },
+  {
+    "id": 93,
+    "type": "word",
+    "en": "senses",
+    "ipa": null,
+    "hy": [
+      "զգայարաններ"
+    ]
+  },
+  {
+    "id": 94,
+    "type": "word",
+    "en": "judgment",
+    "ipa": null,
+    "hy": [
+      "դատողություն"
+    ]
+  },
+  {
+    "id": 95,
+    "type": "word",
+    "en": "figure",
+    "ipa": null,
+    "hy": [
+      "կերպարանք"
+    ]
+  },
+  {
+    "id": 96,
+    "type": "word",
+    "en": "tombstone",
+    "ipa": null,
+    "hy": [
+      "գերեզմանաքար"
+    ]
+  },
+  {
+    "id": 97,
+    "type": "word",
+    "en": "spirit",
+    "ipa": null,
+    "hy": [
+      "ոգի"
+    ]
+  },
+  {
+    "id": 98,
+    "type": "word",
+    "en": "murder",
+    "ipa": null,
+    "hy": [
+      "սպանություն"
+    ]
+  },
+  {
+    "id": 99,
+    "type": "word",
+    "en": "revenge",
+    "ipa": null,
+    "hy": [
+      "վրեժ"
+    ]
+  },
+  {
+    "id": 100,
+    "type": "word",
+    "en": "castle",
+    "ipa": null,
+    "hy": [
+      "ամրոց"
+    ]
+  },
+  {
+    "id": 101,
+    "type": "word",
+    "en": "climate",
+    "ipa": null,
+    "hy": [
+      "կլիմա"
+    ]
+  },
+  {
+    "id": 102,
+    "type": "word",
+    "en": "shadow",
+    "ipa": null,
+    "hy": [
+      "ստվեր"
+    ]
+  }
+]
