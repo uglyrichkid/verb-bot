@@ -445,8 +445,19 @@ bot.on('text', (ctx) => {
   }
 });
 
-bot.launch();
-console.log('✅ Bot is running. Press Ctrl+C to stop.');
+const _token = process.env.BOT_TOKEN;
+console.log(`[startup] pid=${process.pid} NODE_ENV=${process.env.NODE_ENV || 'development'} token=...${_token.slice(-6)} time=${new Date().toISOString()}`);
+
+bot.launch()
+  .then(() => console.log('✅ Bot is running. Press Ctrl+C to stop.'))
+  .catch((err) => {
+    if (err.code === 409 || (err.description && err.description.includes('409'))) {
+      console.error('❌ Telegram 409 Conflict: another instance is already polling this token. Stop all other instances (Railway, local, etc.) and redeploy.');
+    } else {
+      console.error('❌ Bot failed to launch:', err);
+    }
+    process.exit(1);
+  });
 
 process.once('SIGINT',  () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
