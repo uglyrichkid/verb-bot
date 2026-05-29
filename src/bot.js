@@ -6,6 +6,7 @@ const { getDailyProgress } = require('./wordStats');
 const { BTN_QUIZ, init: initQuiz, handleQuizText, isInQuiz, clearQuizSession } = require('./quiz/quizHandler');
 const { BTN_QUIZ_504, init504, handle504QuizText, isIn504Quiz, clearQuiz504Session } = require('./quiz/quiz504Handler');
 const topicsHandler = require('./topics/topicsHandler');
+const logicHandler  = require('./logic/logicHandler');
 
 if (!process.env.BOT_TOKEN) {
   console.error('Error: BOT_TOKEN is not set. Create a .env file with BOT_TOKEN=your_token');
@@ -23,6 +24,7 @@ const BTN = {
   ROUND:        '🏁 Round mode',
   STATS:        '📊 Stats',
   TOPICS:       '📚 Grammar Topics',
+  LOGIC:        logicHandler.BTN_LOGIC,
   STOP:         '🛑 Stop',
   TYPE_MIXED:   '🔀 Mixed',
   TYPE_IRR:     '🔴 Irregular only',
@@ -52,6 +54,7 @@ function mainMenu() {
     [BTN.ROUND,      BTN.STATS],
     [BTN_QUIZ, BTN_QUIZ_504],
     [BTN.TOPICS],
+    [BTN.LOGIC],
     [BTN.STOP],
   ]).resize();
 }
@@ -59,6 +62,7 @@ function mainMenu() {
 initQuiz(mainMenu);
 init504(mainMenu);
 topicsHandler.init(bot);
+logicHandler.init(bot);
 
 function typeMenu() {
   return Markup.keyboard([
@@ -247,6 +251,7 @@ function handleStop(ctx) {
   clearSession(ctx.from.id);
   clearQuizSession(ctx.from.id);
   clearQuiz504Session(ctx.from.id);
+  logicHandler.clearLogicSession(ctx.from.id);
   ctx.reply('🛑 Training stopped. Choose a mode from the menu.', mainMenu());
 }
 
@@ -328,6 +333,17 @@ bot.command('myids', (ctx) => {
 
 bot.on('text', (ctx) => {
   const text = ctx.message.text;
+
+  // Logic Trainer button always re-opens the menu (clears any pending state)
+  if (text === BTN.LOGIC) {
+    logicHandler.clearLogicSession(ctx.from.id);
+    return logicHandler.handleLogicCommand(ctx);
+  }
+
+  // Logic Trainer text intercept (waiting for chunk answer / journal / sentence check)
+  if (logicHandler.isInLogic(ctx.from.id)) {
+    return logicHandler.handleLogicText(ctx);
+  }
 
   // Grammar topics intercepts take priority over all other routing
   if (topicsHandler.isWaitingForGrammarAnswer(ctx.from.id)) {

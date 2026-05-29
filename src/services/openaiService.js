@@ -128,6 +128,92 @@ Be encouraging and brief.`,
   );
 }
 
+// ── English Logic Trainer ─────────────────────────────────────────────────────
+
+async function generateChunkPattern() {
+  return ask(
+    `You are an English coach for an Integration Manager / QA engineer who is an A2-B1 Armenian learner.
+Generate one useful work-related English sentence pattern with a blank (___ or ___).
+Examples:
+"I am waiting for ___."
+"We found an issue with ___."
+"Could you please provide ___?"
+"I will check ___ and get back to you."
+"The issue is related to ___."
+
+Return ONLY the pattern — one sentence, nothing else. Vary it each time.`,
+    60,
+  );
+}
+
+async function checkChunkSentence(pattern, userAnswer) {
+  return ask(
+    `You are an English coach for an A2-B1 Armenian learner (Integration Manager / QA engineer).
+Pattern: "${pattern}"
+Student's sentence: "${userAnswer}"
+
+Reply with:
+1. ✅ Correct! or ❌ Needs correction — [corrected version]
+2. 💡 Short explanation (1-2 sentences, simple English, Armenian word if helpful)
+3. 📝 2 more natural work examples using this same pattern
+
+Keep it short and practical.`,
+    400,
+  );
+}
+
+async function checkWorkJournal(userText) {
+  return ask(
+    `You are an English coach for an A2-B1 Armenian learner (Integration Manager / QA engineer).
+The student wrote a daily work journal:
+
+"${userText}"
+
+Reply with:
+1. ✅ Corrected version (fix grammar only, keep meaning)
+2. 🗣 Natural version (how a native speaker would write it)
+3. 🔑 Useful chunks — list 3-5 key phrases from the text
+4. 📝 3 reusable patterns from this journal
+
+Keep it brief and practical.`,
+    700,
+  );
+}
+
+async function generateSentencePatterns(category) {
+  return ask(
+    `You are an English coach for an A2-B1 Armenian learner (Integration Manager / QA engineer).
+Generate 5 useful work-related sentence patterns for the category: "${category}".
+
+Format exactly like this (use Markdown bold for the category name):
+*${category}:*
+• [pattern with ___] — [example sentence]
+• [pattern with ___] — [example sentence]
+• [pattern with ___] — [example sentence]
+• [pattern with ___] — [example sentence]
+• [pattern with ___] — [example sentence]
+
+Patterns should be practical for daily work: emails, Slack, meetings, partner communication.`,
+    500,
+  );
+}
+
+async function checkEnglishSentence(userSentence) {
+  return ask(
+    `You are an English coach for an A2-B1 Armenian learner (Integration Manager / QA engineer).
+The student sent this sentence: "${userSentence}"
+
+Reply with:
+1. ✅ Corrected sentence (or say it is already correct)
+2. 💡 Short explanation (1-2 sentences, simple English, Armenian if helpful)
+3. 🗣 More natural version
+4. 📝 Reusable pattern from this sentence
+
+Be brief and encouraging.`,
+    400,
+  );
+}
+
 module.exports = {
   generateUnitExplanation,
   generateUnitRules,
@@ -135,4 +221,9 @@ module.exports = {
   generateSingleExercise,
   checkExerciseAnswer,
   checkUserAnswer,
+  generateChunkPattern,
+  checkChunkSentence,
+  checkWorkJournal,
+  generateSentencePatterns,
+  checkEnglishSentence,
 };
