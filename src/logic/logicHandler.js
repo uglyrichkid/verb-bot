@@ -30,6 +30,18 @@ const CATEGORY_LABELS = {
   [CB.CAT_REQUEST]:  'Request',
 };
 
+async function safeEditMessageText(ctx, text, options = {}) {
+  try {
+    return await ctx.editMessageText(text, options);
+  } catch (err) {
+    if (err?.response?.description?.includes('message is not modified')) {
+      await ctx.answerCbQuery().catch(() => {});
+      return;
+    }
+    throw err;
+  }
+}
+
 const sessions = new Map();
 
 function getSession(userId) {
@@ -150,13 +162,14 @@ async function startChunkMode(ctx) {
 function init(bot) {
   // ── Back / menu ──────────────────────────────────────────────────────────────
   bot.action(CB.BACK, async (ctx) => {
-    await ctx.answerCbQuery();
+    await ctx.answerCbQuery().catch(() => {});
     const s = getSession(ctx.from.id);
     s.waitingForChunkAnswer = false;
     s.waitingForJournal = false;
     s.waitingForSentenceCheck = false;
     s.currentPattern = null;
-    await ctx.editMessageText(
+    await safeEditMessageText(
+      ctx,
       '🧠 *English Logic Trainer*\n\nChoose a mode:',
       { parse_mode: 'Markdown', ...menuKeyboard() },
     );
@@ -164,26 +177,28 @@ function init(bot) {
 
   // ── Chunk Replacement ────────────────────────────────────────────────────────
   async function doChunk(ctx) {
-    await ctx.editMessageText('Generating a pattern... ⏳');
+    await safeEditMessageText(ctx, 'Generating a pattern... ⏳');
     const pattern = await startChunkMode(ctx);
     if (!pattern) {
-      await ctx.editMessageText('❌ Could not generate pattern. Try again.', menuKeyboard());
+      await safeEditMessageText(ctx, '❌ Could not generate pattern. Try again.', menuKeyboard());
       return;
     }
-    await ctx.editMessageText(
+    await safeEditMessageText(
+      ctx,
       `🔁 *Chunk Replacement*\n\nYour pattern:\n\n*${pattern}*\n\nWrite one sentence using this pattern:`,
       { parse_mode: 'Markdown' },
     );
   }
 
-  bot.action(CB.CHUNK, async (ctx) => { await ctx.answerCbQuery(); await doChunk(ctx); });
-  bot.action(CB.NEXT,  async (ctx) => { await ctx.answerCbQuery(); await doChunk(ctx); });
+  bot.action(CB.CHUNK, async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doChunk(ctx); });
+  bot.action(CB.NEXT,  async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doChunk(ctx); });
 
   // ── Daily Work Journal ───────────────────────────────────────────────────────
   async function doJournal(ctx) {
     const s = getSession(ctx.from.id);
     s.waitingForJournal = true;
-    await ctx.editMessageText(
+    await safeEditMessageText(
+      ctx,
       '📓 *Daily Work Journal*\n\n' +
       'Write 5 sentences about today:\n\n' +
       '1. What I did today\n' +
@@ -196,13 +211,14 @@ function init(bot) {
     );
   }
 
-  bot.action(CB.JOURNAL,       async (ctx) => { await ctx.answerCbQuery(); await doJournal(ctx); });
-  bot.action(CB.JOURNAL_AGAIN, async (ctx) => { await ctx.answerCbQuery(); await doJournal(ctx); });
+  bot.action(CB.JOURNAL,       async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doJournal(ctx); });
+  bot.action(CB.JOURNAL_AGAIN, async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doJournal(ctx); });
 
   // ── Sentence Patterns ────────────────────────────────────────────────────────
   bot.action(CB.PATTERNS, async (ctx) => {
-    await ctx.answerCbQuery();
-    await ctx.editMessageText(
+    await ctx.answerCbQuery().catch(() => {});
+    await safeEditMessageText(
+      ctx,
       '🧩 *Sentence Patterns*\n\nChoose a category:',
       { parse_mode: 'Markdown', ...categoriesKeyboard() },
     );
@@ -210,11 +226,11 @@ function init(bot) {
 
   for (const [cbKey, label] of Object.entries(CATEGORY_LABELS)) {
     bot.action(cbKey, async (ctx) => {
-      await ctx.answerCbQuery();
-      await ctx.editMessageText(`Generating ${label} patterns... ⏳`);
+      await ctx.answerCbQuery().catch(() => {});
+      await safeEditMessageText(ctx, `Generating ${label} patterns... ⏳`);
       try {
         const patterns = await openai.generateSentencePatterns(label);
-        await ctx.editMessageText(patterns, {
+        await safeEditMessageText(ctx, patterns, {
           parse_mode: 'Markdown',
           ...Markup.inlineKeyboard([
             [Markup.button.callback('🧩 Other category', CB.PATTERNS)],
@@ -222,7 +238,7 @@ function init(bot) {
           ]),
         });
       } catch {
-        await ctx.editMessageText('❌ Could not generate patterns. Try again.', categoriesKeyboard());
+        await safeEditMessageText(ctx, '❌ Could not generate patterns. Try again.', categoriesKeyboard());
       }
     });
   }
@@ -231,14 +247,15 @@ function init(bot) {
   async function doCheck(ctx) {
     const s = getSession(ctx.from.id);
     s.waitingForSentenceCheck = true;
-    await ctx.editMessageText(
+    await safeEditMessageText(
+      ctx,
       '✅ *Check My Sentence*\n\nSend any English sentence and I will check it:',
       { parse_mode: 'Markdown' },
     );
   }
 
-  bot.action(CB.CHECK,       async (ctx) => { await ctx.answerCbQuery(); await doCheck(ctx); });
-  bot.action(CB.CHECK_AGAIN, async (ctx) => { await ctx.answerCbQuery(); await doCheck(ctx); });
+  bot.action(CB.CHECK,       async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doCheck(ctx); });
+  bot.action(CB.CHECK_AGAIN, async (ctx) => { await ctx.answerCbQuery().catch(() => {}); await doCheck(ctx); });
 }
 
 module.exports = {
