@@ -42,7 +42,7 @@ const TYPE_LABELS = {
 
 // ── Factory ────────────────────────────────────────────────────────────────────
 
-function createQuizHandler({ source, entryBtn, title, wordList, getSession, setSession, clearSession, isActive }) {
+function createQuizHandler({ source, entryBtn, title, wordList, getSession, setSession, clearSession, isActive, extraMainMenuRows = [] }) {
   // Sorted copy of wordList for card/learn mode (shown by id order)
   const learnWords = [...wordList].sort((a, b) => a.id - b.id);
 
@@ -64,6 +64,7 @@ function createQuizHandler({ source, entryBtn, title, wordList, getSession, setS
       [BTN.PRACTICE, BTN.MC],
       [BTN.ROUND,    BTN.MISTAKES],
       [BTN.HARD,     BTN.DAILY],
+      ...extraMainMenuRows,
       [BTN.BACK],
     ]).resize();
   }
@@ -501,6 +502,7 @@ function createQuizHandler({ source, entryBtn, title, wordList, getSession, setS
 
   return {
     ENTRY_BTN: entryBtn,
+    getMainMenu: quizMainMenu,
     init(mainMenuFn) { _mainMenu = mainMenuFn; },
     handleText,
     isActive,
