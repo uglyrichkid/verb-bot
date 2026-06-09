@@ -58,8 +58,27 @@ function addWord(en, hy) {
   return word;
 }
 
+function addWordsBulk(items) {
+  const arr = loadWords();
+  let maxId = arr.reduce((m, w) => Math.max(m, w.id), 0);
+  let added = 0;
+  let duplicates = 0;
+
+  for (const { en, hy } of items) {
+    const lower = en.toLowerCase();
+    const exists = arr.find(w => w.en.toLowerCase() === lower);
+    if (exists) { duplicates++; continue; }
+    maxId++;
+    arr.push({ id: maxId, type: 'word', en: en.trim(), ipa: null, hy: [hy.trim()] });
+    added++;
+  }
+
+  if (added > 0) saveWords(arr);
+  return { added, duplicates };
+}
+
 function getWords() {
   return loadWords();
 }
 
-module.exports = { loadWords, saveWords, findWord, addWord, getWords };
+module.exports = { loadWords, saveWords, findWord, addWord, addWordsBulk, getWords };
