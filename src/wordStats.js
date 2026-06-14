@@ -104,4 +104,23 @@ function getHardWords(userId, source, allWords, limit) {
     .slice(0, n);
 }
 
-module.exports = { recordWordAnswer, getRawWordStats, getMistakeWordIds, getDailyProgress, getHardWords };
+function getMasteryLevel(ws) {
+  if (!ws || ws.shown === 0) return 'new';
+  const accuracy = ws.correct / ws.shown;
+  if (ws.shown >= 10 && (accuracy >= 0.9 || (ws.streak || 0) >= 5)) return 'mastered';
+  if (ws.shown >= 5 && accuracy >= 0.6) return 'known';
+  return 'learning';
+}
+
+function getMasteryStats(userId, source, allWords) {
+  const data = load();
+  const u = getUser(data, userId);
+  const result = { new: [], learning: [], known: [], mastered: [] };
+  for (const word of allWords) {
+    const ws = u.words[`${source}:${word.id}`];
+    result[getMasteryLevel(ws)].push(word);
+  }
+  return result;
+}
+
+module.exports = { recordWordAnswer, getRawWordStats, getMistakeWordIds, getDailyProgress, getHardWords, getMasteryLevel, getMasteryStats };
