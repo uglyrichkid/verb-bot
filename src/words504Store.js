@@ -5,6 +5,7 @@ const path = require('path');
 const DATA_DIR  = path.join(__dirname, '..', 'data');
 const JSON_PATH = path.join(DATA_DIR, 'words504.json');
 const TXT_PATH  = path.join(__dirname, '..', '504.txt');
+const UNIT_SIZE = 20;
 
 let _words = null;
 
@@ -28,14 +29,37 @@ function _loadFromTxt() {
   return result;
 }
 
+function _assignUnitIds(arr) {
+  arr.sort((a, b) => a.id - b.id);
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].unitId == null) {
+      arr[i].unitId = Math.ceil((i + 1) / UNIT_SIZE);
+    }
+  }
+}
+
+function _nextUnitId(arr) {
+  if (arr.length === 0) return 1;
+  const maxUnit = arr.reduce((m, w) => Math.max(m, w.unitId || 1), 1);
+  const inLast = arr.filter(w => w.unitId === maxUnit).length;
+  return inLast < UNIT_SIZE ? maxUnit : maxUnit + 1;
+}
+
 function loadWords() {
   if (_words) return _words;
+  let needsSave = false;
   if (fs.existsSync(JSON_PATH)) {
     _words = JSON.parse(fs.readFileSync(JSON_PATH, 'utf8'));
+    if (_words.some(w => w.unitId == null)) {
+      _assignUnitIds(_words);
+      needsSave = true;
+    }
   } else {
     _words = _loadFromTxt();
-    saveWords(_words);
+    _assignUnitIds(_words);
+    needsSave = true;
   }
+  if (needsSave) saveWords(_words);
   return _words;
 }
 
@@ -52,7 +76,8 @@ function findWord(en) {
 function addWord(en, hy) {
   const arr = loadWords();
   const maxId = arr.reduce((m, w) => Math.max(m, w.id), 0);
-  const word = { id: maxId + 1, type: 'word', en: en.trim(), ipa: null, hy: [hy.trim()] };
+  const unitId = _nextUnitId(arr);
+  const word = { id: maxId + 1, unitId, type: 'word', en: en.trim(), ipa: null, hy: [hy.trim()] };
   arr.push(word);
   saveWords(arr);
   return word;
@@ -69,7 +94,8 @@ function addWordsBulk(items) {
     const exists = arr.find(w => w.en.toLowerCase() === lower);
     if (exists) { duplicates++; continue; }
     maxId++;
-    arr.push({ id: maxId, type: 'word', en: en.trim(), ipa: null, hy: [hy.trim()] });
+    const unitId = _nextUnitId(arr);
+    arr.push({ id: maxId, unitId, type: 'word', en: en.trim(), ipa: null, hy: [hy.trim()] });
     added++;
   }
 
@@ -81,4 +107,20 @@ function getWords() {
   return loadWords();
 }
 
-module.exports = { loadWords, saveWords, findWord, addWord, addWordsBulk, getWords };
+function getUnits() {
+  const words = loadWords();
+  const map = {};
+  for (const w of words) {
+    if (!map[w.unitId]) map[w.unitId] = [];
+    map[w.unitId].push(w);
+  }
+  return Object.keys(map)
+    .sort((a, b) => Number(a) - Number(b))
+    .map(uid => ({ unitId: Number(uid), words: map[uid] }));
+}
+
+function getWordsInUnit(unitId) {
+  return loadWords().filter(w => w.unitId === unitId);
+}
+
+module.exports = { loadWords, saveWords, findWord, addWord, addWordsBulk, getWords, getUnits, getWordsInUnit, UNIT_SIZE };

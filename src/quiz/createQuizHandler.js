@@ -507,6 +507,7 @@ function createQuizHandler({ source, entryBtn, title, wordList, getSession, setS
     handleText,
     isActive,
     clearSession,
+    startUnitPractice: startPractice,
   };
 }
 
