@@ -18,6 +18,9 @@ const BTN_UNIT_MIXED    = '🔄 Mixed Mode';
 const BTN_UNIT_HARD     = '⭐ Hard Words';
 const BTN_UNIT_MISTAKES = '❌ Practice Mistakes';
 const BTN_UNIT_PROGRESS = '📊 Progress';
+const BTN_ROUND_EN_HY   = '🇬🇧 English → 🇦🇲 Armenian';
+const BTN_ROUND_HY_EN   = '🇦🇲 Armenian → 🇬🇧 English';
+const BTN_ROUND_MIXED   = '🔀 Mixed';
 const BTN_BACK          = '⬅️ Back';
 const BTN_BACK_UNITS    = '🔙 Back to Units';
 
@@ -28,7 +31,8 @@ const MODE_BULK_ADD      = 'quiz504_bulk_add';
 const MODE_UNITS_LIST    = 'quiz504_units_list';
 const MODE_UNIT_VIEW     = 'quiz504_unit_view';
 const MODE_UNIT_PRACTICE = 'quiz504_unit_practice';
-const MODE_UNIT_ROUND    = 'quiz504_unit_round';
+const MODE_UNIT_ROUND     = 'quiz504_unit_round';
+const MODE_UNIT_ROUND_DIR = 'quiz504_unit_round_dir';
 const MODE_UNIT_MIXED    = 'quiz504_unit_mixed';
 const MODE_UNIT_HARD     = 'quiz504_unit_hard';
 const MODE_UNIT_MISTAKES = 'quiz504_unit_mistakes';
@@ -68,6 +72,15 @@ function _unitViewMenu() {
 
 function _unitPracticeMenu() {
   return Markup.keyboard([[BTN_BACK_UNITS]]).resize();
+}
+
+function _unitRoundDirMenu() {
+  return Markup.keyboard([
+    [BTN_ROUND_EN_HY],
+    [BTN_ROUND_HY_EN],
+    [BTN_ROUND_MIXED],
+    [BTN_BACK],
+  ]).resize();
 }
 
 function _unitRoundMenu() {
@@ -217,17 +230,30 @@ function _startUnitMixed(ctx, unitId) {
 }
 
 function _startUnitRound(ctx, unitId) {
-  const userId = ctx.from.id;
   const words = getWordsInUnit(unitId);
   if (words.length === 0) return _showUnitView(ctx, unitId);
+  setQuiz504Session(ctx.from.id, { mode: MODE_UNIT_ROUND_DIR, currentUnitId: unitId });
+  return ctx.reply(
+    `🔁 *Round Mode — Unit ${unitId}*\n\nChoose direction:`,
+    { parse_mode: 'Markdown', ..._unitRoundDirMenu() }
+  );
+}
 
+function _startUnitRoundWithDir(ctx, unitId, direction) {
+  const userId = ctx.from.id;
+  const words = getWordsInUnit(unitId);
   const queue = shuffle([...words]);
+  const firstDir = direction === 'mixed' ? _pickDir() : direction;
+  const label = direction === 'en-hy' ? 'English → Armenian'
+    : direction === 'hy-en' ? 'Armenian → English'
+    : 'Mixed';
   setQuiz504Session(userId, {
     mode: MODE_UNIT_ROUND,
     currentUnitId: unitId,
+    roundDirection: direction,
     queue,
     currentWord: queue[0],
-    currentQuestionDir: 'en-hy',
+    currentQuestionDir: firstDir,
     totalWords: queue.length,
     roundSize: queue.length,
     correct: 0,
@@ -235,9 +261,9 @@ function _startUnitRound(ctx, unitId) {
     startTime: Date.now(),
   });
   return ctx.reply(
-    `🔁 *Round Mode — Unit ${unitId}*\n📚 ${queue.length} words to complete.\nWrong answers repeat. Finish all correctly to win!\n\nPress 🔙 Back to Units to stop.`,
+    `🔁 *Round Mode — Unit ${unitId}*\n📖 ${label}\n📚 ${queue.length} words to complete.\nWrong answers repeat. Finish all correctly to win!\n\nPress 🔙 Back to Units to stop.`,
     { parse_mode: 'Markdown' }
-  ).then(() => _askUnitWord(ctx, queue[0], 'en-hy', _unitRoundMenu()));
+  ).then(() => _askUnitWord(ctx, queue[0], firstDir, _unitRoundMenu()));
 }
 
 function _startUnitHard(ctx, unitId) {
@@ -343,7 +369,7 @@ function _handleUnitPracticeAnswer(ctx, text, session) {
 
 function _handleUnitRoundAnswer(ctx, text, session) {
   const userId = ctx.from.id;
-  const { queue, currentUnitId } = session;
+  const { queue, currentUnitId, roundDirection } = session;
   const currentWord = queue[0];
   const dir = session.currentQuestionDir || 'en-hy';
   const isCorrect = validateAnswer(currentWord, text, dir);
@@ -356,7 +382,10 @@ function _handleUnitRoundAnswer(ctx, text, session) {
   if (isCorrect) {
     session.correct++;
     queue.shift();
-    feedback = `✅ Correct!\n${currentWord.en} — ${correctDisplay}`;
+    feedback = dir === 'en-hy'
+      ? `✅ Correct!\n${currentWord.en} — ${correctDisplay}`
+      : `✅ Correct!\n${currentWord.hy[0]} — ${correctDisplay}`;
+
     if (queue.length === 0) {
       const ms = Date.now() - (session.startTime || Date.now());
       const total = session.correct + session.wrong;
@@ -377,11 +406,13 @@ function _handleUnitRoundAnswer(ctx, text, session) {
     feedback = `❌ Wrong\nCorrect answer: *${correctDisplay}*`;
   }
 
+  const progress = `📊 Correct: ${session.correct}/${session.totalWords} · Remaining: ${queue.length} · Mistakes: ${session.wrong}`;
+  const nextDir = (roundDirection || 'en-hy') === 'mixed' ? _pickDir() : (roundDirection || 'en-hy');
   session.currentWord = queue[0];
-  session.currentQuestionDir = 'en-hy';
+  session.currentQuestionDir = nextDir;
 
-  return ctx.reply(feedback, { parse_mode: 'Markdown' })
-    .then(() => _askUnitWord(ctx, queue[0], 'en-hy', _unitRoundMenu()));
+  return ctx.reply(`${feedback}\n${progress}`, { parse_mode: 'Markdown' })
+    .then(() => _askUnitWord(ctx, queue[0], nextDir, _unitRoundMenu()));
 }
 
 // ── Add word helpers (unchanged) ──────────────────────────────────────────────
@@ -532,6 +563,16 @@ function handle504QuizText(ctx) {
       session.mode === MODE_UNIT_HARD     || session.mode === MODE_UNIT_MISTAKES) {
     if (text === BTN_BACK_UNITS || text === BTN_BACK) return _showUnitView(ctx, session.currentUnitId);
     return _handleUnitPracticeAnswer(ctx, text, session);
+  }
+
+  // ── Unit round direction selection ─────────────────────────────────────────
+  if (session.mode === MODE_UNIT_ROUND_DIR) {
+    const unitId = session.currentUnitId;
+    if (text === BTN_BACK)          return _showUnitView(ctx, unitId);
+    if (text === BTN_ROUND_EN_HY)   return _startUnitRoundWithDir(ctx, unitId, 'en-hy');
+    if (text === BTN_ROUND_HY_EN)   return _startUnitRoundWithDir(ctx, unitId, 'hy-en');
+    if (text === BTN_ROUND_MIXED)   return _startUnitRoundWithDir(ctx, unitId, 'mixed');
+    return ctx.reply(`🔁 *Round Mode — Unit ${unitId}*\n\nChoose direction:`, { parse_mode: 'Markdown', ..._unitRoundDirMenu() });
   }
 
   // ── Unit round ──────────────────────────────────────────────────────────────
